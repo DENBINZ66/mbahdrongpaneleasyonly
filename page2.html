@@ -1,0 +1,514 @@
+<!DOCTYPE html>  <html lang="id">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Mbahdrong</title>  <style>  
+  
+body{  
+background:#000;  
+color:white;  
+font-family:Arial;  
+margin:0;  
+}  
+  
+.header{  
+display:flex;  
+align-items:center;  
+padding:15px;  
+background:#111;  
+}  
+  
+.profile{  
+width:45px;  
+height:45px;  
+border-radius:50%;  
+margin-right:10px;  
+cursor:pointer;  
+}  
+  
+.name{  
+font-size:18px;  
+font-weight:bold;  
+}  
+  
+.role{  
+font-size:13px;  
+color:#ccc;  
+}  
+  
+.emoji{  
+filter: grayscale(100%) brightness(1.6);  
+margin-right:5px;  
+}  
+  
+.container{  
+padding:15px;  
+}  
+  
+.banner{  
+width:100%;  
+border-radius:15px;  
+overflow:hidden;  
+}  
+  
+.banner video{  
+width:100%;  
+border-radius:15px;  
+}  
+  
+.menu{  
+display:flex;  
+gap:10px;  
+margin-top:15px;  
+}  
+  
+.btn{  
+flex:1;  
+padding:15px;  
+text-align:center;  
+border-radius:12px;  
+border:2px solid white;  
+background:black;  
+color:silver;  
+font-weight:bold;  
+cursor:pointer;  
+}  
+  
+.btn.active{  
+background:#111;  
+}  
+  
+.quiz-box{  
+background:#0f0f0f;  
+padding:18px;  
+border-radius:16px;  
+margin-top:20px;  
+}  
+  
+.quiz-box label{  
+font-size:13px;  
+color:#aaa;  
+}  
+  
+.input-box{  
+display:flex;  
+align-items:center;  
+background:#151515;  
+padding:12px;  
+border-radius:12px;  
+margin-top:6px;  
+margin-bottom:15px;  
+}  
+  
+.icon2{  
+margin-right:10px;  
+font-size:18px;  
+color:silver;  
+}  
+  
+.input-box input{  
+background:none;  
+border:none;  
+outline:none;  
+color:white;  
+width:100%;  
+font-size:15px;  
+}  
+  
+.level-box{  
+background:#151515;  
+border-radius:12px;  
+padding:10px;  
+margin-top:6px;  
+margin-bottom:15px;  
+}  
+  
+.level-header{  
+display:flex;  
+justify-content:space-between;  
+align-items:center;  
+cursor:pointer;  
+padding:10px;  
+background:#1a1a1a;  
+border-radius:8px;  
+}  
+  
+.arrow{  
+font-size:18px;  
+color:silver;  
+}  
+  
+.level-option{  
+display:flex;  
+justify-content:space-between;  
+align-items:center;  
+padding:10px;  
+cursor:pointer;  
+}  
+  
+.circle{  
+width:18px;  
+height:18px;  
+border-radius:50%;  
+border:2px solid silver;  
+}  
+  
+.circle.active{  
+background:silver;  
+box-shadow:0 0 10px silver;  
+}  
+  
+.startquiz{  
+width:100%;  
+padding:15px;  
+border-radius:14px;  
+border:none;  
+font-size:16px;  
+font-weight:bold;  
+cursor:pointer;  
+background:linear-gradient(90deg,#bfbfbf,#ffffff,#bfbfbf);  
+color:black;  
+}  
+  
+.hidden{  
+display:none;  
+}  
+  
+.popup{  
+position:fixed;  
+top:0;  
+left:0;  
+width:100%;  
+height:100%;  
+background:rgba(0,0,0,0.7);  
+display:none;  
+align-items:center;  
+justify-content:center;  
+z-index:999;  
+}  
+  
+.popup-box{  
+background:#111;  
+padding:25px;  
+border-radius:15px;  
+text-align:center;  
+width:260px;  
+box-shadow:0 0 20px silver;  
+position:relative;  
+}  
+  
+.loadingbar{  
+width:100%;  
+height:8px;  
+background:#333;  
+border-radius:10px;  
+overflow:hidden;  
+margin-top:10px;  
+}  
+  
+.loadingfill{  
+width:0%;  
+height:100%;  
+background:silver;  
+}  
+  
+.closeX{  
+position:absolute;  
+top:10px;  
+right:15px;  
+font-size:22px;  
+cursor:pointer;  
+color:silver;  
+}  
+  
+.profileinfo{  
+background:#1a1a1a;  
+padding:10px;  
+border-radius:10px;  
+margin-top:10px;  
+}  
+  
+</style>  </head>  <body>  <audio id="bgm" loop>  
+<source src="song.mp3">  
+</audio>  <audio id="click">  
+<source src="click1.mp3">  
+</audio>  <div class="header">  <img src="logo.jpg" class="profile" onclick="openProfile()">  <div>  
+<div class="name">free.mbahdrong</div>  
+<div class="role">Role : FREE • Exp : <span id="exp"></span></div>  
+</div>  </div>  <div class="container">  <div class="banner">  
+<video id="vid" autoplay muted loop playsinline>  
+<source src="video1.mp4">  
+</video>  
+</div>  <div class="menu">  <div class="btn active" onclick="openMenu('quiz',this)">  
+<span class="emoji">🧩</span> QUIZ  
+</div>  <div class="btn" onclick="openMenu('redeem',this)">  
+<span class="emoji">🎁</span> KODE REDEEM  
+</div>  </div>  <div id="quiz">  <div class="quiz-box">  <label>USERNAME</label>
+
+<div class="input-box">  
+<span class="icon2 emoji">👤</span>  
+<input id="username" type="text" placeholder="Contoh : YantoGaming">  
+</div>  <label>PILIH LEVEL</label>
+
+<div class="level-box">  <div class="level-header" onclick="toggleMode()">  
+<span><span class="emoji">🎮</span> Mode</span>  
+<span id="arrow" class="arrow">⌄</span>  
+</div>  <div id="modeList" class="hidden">  <div class="level-option" onclick="selectLevel(this,'easy')">  
+<span>• Easy</span>  
+<div class="circle"></div>  
+</div>  <div class="level-option" onclick="selectLevel(this,'medium')">  
+<span>• Medium</span>  
+<div class="circle"></div>  
+</div>  <div class="level-option" onclick="selectLevel(this,'hard')">  
+<span>• Hard</span>  
+<div class="circle"></div>  
+</div>  </div>  </div>  <button class="startquiz" onclick="startQuiz()">  
+<span class="emoji">🚀</span> START QUIZ  
+</button>  </div>  </div>  <div id="redeem" class="hidden">  <div class="quiz-box">  <label>KODE REDEEM</label>
+
+<div class="input-box">  
+<span class="icon2 emoji">🎁</span>  
+<input type="text" id="redeemInput" placeholder="Masukkan kode">  
+</div>  <button class="startquiz" onclick="redeemCode()">  
+TUKAR KODE  
+</button>  </div>  </div>  </div>  <div id="popup" class="popup">  
+<div class="popup-box">  
+<div id="popupText"></div>  
+<br>  
+<button onclick="closePopup()">OK</button>  
+</div>  
+</div>  <div id="profilePopup" class="popup">  
+<div class="popup-box">  <div class="closeX" onclick="closeProfile()">✕</div>  <img src="logo.jpg" style="width:70px;border-radius:50%;margin-bottom:10px">  <h2>free.mbahdrong</h2>  <div class="profileinfo">  
+Role : FREE  
+</div>  <div class="profileinfo">  
+Exp : <span id="expPopup"></span>  
+</div>  <div class="profileinfo">  
+Score : <span id="scorePopup"></span>  
+</div>  </div>  
+</div>  <script>  
+  
+const music=document.getElementById("bgm")  
+const video=document.getElementById("vid")  
+const click=document.getElementById("click")  
+  
+let selectedMode=null  
+  
+document.body.addEventListener("click",function(){  
+  
+music.volume=0.6  
+music.play()  
+  
+video.muted=false  
+video.play()  
+  
+},{once:true})  
+  
+function playClick(){  
+click.currentTime=0  
+click.play()  
+}  
+  
+function openMenu(menu,btn){  
+  
+playClick()  
+  
+document.getElementById("quiz").classList.add("hidden")  
+document.getElementById("redeem").classList.add("hidden")  
+  
+document.getElementById(menu).classList.remove("hidden")  
+  
+document.querySelectorAll(".btn").forEach(b=>{  
+b.classList.remove("active")  
+})  
+  
+btn.classList.add("active")  
+  
+}  
+  
+function toggleMode(){  
+  
+playClick()  
+  
+let list=document.getElementById("modeList")  
+let arrow=document.getElementById("arrow")  
+  
+if(list.classList.contains("hidden")){  
+list.classList.remove("hidden")  
+arrow.innerHTML="⌃"  
+}else{  
+list.classList.add("hidden")  
+arrow.innerHTML="⌄"  
+}  
+  
+}  
+  
+function selectLevel(el,mode){  
+  
+playClick()  
+  
+document.querySelectorAll(".circle").forEach(c=>{  
+c.classList.remove("active")  
+})  
+  
+el.querySelector(".circle").classList.add("active")  
+  
+selectedMode=mode  
+  
+}  
+  
+function startQuiz(){  
+  
+playClick()  
+  
+let username=document.getElementById("username").value.trim()  
+  
+if(username===""){  
+showPopup("Harap masukkan username")  
+return  
+}  
+  
+if(selectedMode===null){  
+showPopup("Login failed please select mode")  
+return  
+}  
+  
+document.getElementById("popup").style.display="flex"  
+  
+document.getElementById("popupText").innerHTML=  
+"Please wait loading"+  
+"<div class='loadingbar'><div id='loadingFill' class='loadingfill'></div></div>"  
+  
+let progress=0  
+  
+let load=setInterval(function(){  
+  
+progress+=10  
+  
+document.getElementById("loadingFill").style.width=progress+"%"  
+  
+if(progress>=100){  
+  
+clearInterval(load)  
+  
+setTimeout(function(){  
+  
+document.getElementById("popupText").innerHTML="Login Successful"  
+  
+setTimeout(function(){  
+  
+if(selectedMode==="easy") window.location="easy.html"  
+if(selectedMode==="medium") window.location="medium.html"  
+if(selectedMode==="hard") window.location="hard.html"  
+  
+},1000)  
+  
+},500)  
+  
+}  
+  
+},200)  
+  
+}  
+  
+let score = localStorage.getItem("score") || 0  
+  
+function redeemCode(){  
+  
+playClick()  
+  
+let code=document.getElementById("redeemInput").value.toUpperCase()  
+  
+if(code==="MBAHDRONG"){  
+  
+score=parseInt(score)+50  
+localStorage.setItem("score",score)  
+  
+showPopup("Redeem Berhasil +50 Skor")  
+  
+}  
+  
+else if(code==="RAMADHAN"){  
+  
+score=parseInt(score)+30  
+localStorage.setItem("score",score)  
+  
+showPopup("Redeem Berhasil +30 Skor")  
+  
+}  
+  
+else{  
+  
+showPopup("Failed to Redeem Code")  
+  
+}  
+  
+document.getElementById("redeemInput").value=""  
+  
+}  
+  
+function showPopup(text){  
+  
+document.getElementById("popupText").innerHTML=text  
+document.getElementById("popup").style.display="flex"  
+  
+}  
+  
+function closePopup(){  
+document.getElementById("popup").style.display="none"  
+}  
+  
+function openProfile(){  
+  
+playClick()  
+  
+document.getElementById("profilePopup").style.display="flex"  
+  
+document.getElementById("scorePopup").innerText =  
+localStorage.getItem("score") || 0  
+  
+}  
+  
+function closeProfile(){  
+  
+playClick()  
+  
+document.getElementById("profilePopup").style.display="none"  
+  
+}  
+  
+/* EXP TIMER */  
+  
+let startTime = localStorage.getItem("startTime")  
+  
+if(!startTime){  
+startTime = Date.now()  
+localStorage.setItem("startTime",startTime)  
+}  
+  
+let duration = 7*24*60*60*1000  
+  
+function updateExp(){  
+  
+let now = Date.now()  
+  
+let end = parseInt(startTime) + duration  
+  
+let remaining = end - now  
+  
+let days=Math.floor(remaining/(1000*60*60*24))  
+let hours=Math.floor((remaining/(1000*60*60))%24)  
+let minutes=Math.floor((remaining/(1000*60))%60)  
+let seconds=Math.floor((remaining/1000)%60)  
+  
+let text=days+" Hari "+hours+" Jam "+minutes+" Menit "+seconds+" Detik"  
+  
+document.getElementById("exp").innerText=text  
+document.getElementById("expPopup").innerText=text  
+  
+}  
+  
+setInterval(updateExp,1000)  
+  
+updateExp()  
+  
+</script>  </body>  
+</html>

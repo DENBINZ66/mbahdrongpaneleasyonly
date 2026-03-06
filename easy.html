@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MbahDrong Easy</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0f0f0f;
+color:white;
+text-align:center;
+overflow-x:hidden;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+backdrop-filter:blur(6px);
+z-index:5;
+display:none;
+}
+
+.menuBtn{
+position:fixed;
+top:20px;
+left:20px;
+font-size:30px;
+color:white;
+cursor:pointer;
+z-index:10;
+}
+
+.sidebar{
+position:fixed;
+top:0;
+left:-340px;
+width:300px;
+height:100%;
+background:black;
+overflow:hidden;
+padding:90px 20px;
+transition:0.35s;
+z-index:9;
+}
+
+.menuVideo{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-1;
+opacity:0.6;
+}
+
+.title{
+color:white;
+font-size:40px;
+font-weight:bold;
+margin-bottom:35px;
+letter-spacing:2px;
+}
+
+.menuItem{
+display:flex;
+align-items:center;
+gap:15px;
+background:rgba(0,0,0,0.45);
+padding:16px;
+border-radius:18px;
+margin-bottom:18px;
+color:white;
+font-size:20px;
+text-decoration:none;
+backdrop-filter:blur(6px);
+}
+
+.menuItem img{
+width:22px;
+height:22px;
+}
+
+.loginIcon{
+font-size:22px;
+filter:grayscale(100%) brightness(80%);
+}
+
+.banner{
+position:relative;
+width:90%;
+height:170px;
+margin:20px auto;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 0 20px rgba(0,0,0,0.8);
+}
+
+.bannerVideo{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.bannerText{
+position:absolute;
+bottom:15px;
+left:15px;
+text-align:left;
+}
+
+.bannerText h1{
+margin:0;
+font-size:28px;
+color:white;
+letter-spacing:1px;
+text-shadow:0 0 5px #fff,0 0 10px rgba(255,255,255,0.5);
+}
+
+.bannerText p{
+margin:0;
+font-size:12px;
+color:#ccc;
+letter-spacing:2px;
+}
+
+.soundBtn{
+position:absolute;
+right:10px;
+bottom:10px;
+background:rgba(0,0,0,0.6);
+border:none;
+color:#bbb;
+padding:8px 12px;
+border-radius:8px;
+cursor:pointer;
+font-size:12px;
+}
+
+.quizBox{
+width:90%;
+margin:auto;
+margin-top:20px;
+background:rgba(0,0,0,0.45);
+backdrop-filter:blur(12px);
+padding:22px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.1);
+box-shadow:0 0 25px rgba(0,0,0,0.7),0 0 8px rgba(255,255,255,0.05) inset;
+position:relative;
+}
+
+.question{
+font-size:18px;
+margin-bottom:10px;
+}
+
+.score{
+font-size:14px;
+color:#bbb;
+margin-bottom:10px;
+}
+
+.timerBar{
+width:100%;
+height:6px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
+overflow:hidden;
+margin-bottom:15px;
+}
+
+.timerLoad{
+height:100%;
+width:100%;
+background:linear-gradient(90deg,#ffd500,#ff9900);
+}
+
+.option{
+background:rgba(255,255,255,0.05);
+padding:14px;
+margin:10px 0;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.08);
+cursor:pointer;
+transition:0.25s;
+font-size:15px;
+}
+
+.option:hover{
+background:rgba(255,255,255,0.08);
+transform:scale(1.02);
+}
+
+.correct{
+border:2px solid #ffd500;
+box-shadow:0 0 10px #ffd500,0 0 20px #ffd500;
+}
+
+.wrong{
+border:2px solid red;
+box-shadow:0 0 10px red,0 0 20px red;
+}
+
+/* LOADING SCREEN */
+
+.loadingScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.8);
+z-index:999;
+}
+
+.loadingBox{
+width:80%;
+max-width:400px;
+padding:20px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.3);
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+}
+
+.loadingText{
+margin-bottom:10px;
+}
+
+.progress{
+width:100%;
+height:6px;
+background:rgba(255,255,255,0.2);
+border-radius:10px;
+overflow:hidden;
+}
+
+.progressBar{
+height:100%;
+width:0%;
+background:white;
+}
+
+.notif{
+position:absolute;
+top:10px;
+right:15px;
+font-size:18px;
+color:#bbb;
+cursor:pointer;
+}
+
+.infoPopup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:rgba(0,0,0,0.9);
+padding:20px 30px;
+border-radius:12px;
+display:none;
+z-index:999;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="menuBtn" onclick="toggleMenu()">☰</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="loadingScreen" id="loadingScreen">
+<div class="loadingBox">
+<div class="loadingText">Please wait for loading</div>
+<div class="progress">
+<div class="progressBar" id="progressBar"></div>
+</div>
+</div>
+</div>
+
+<audio id="sweep">
+<source src="sweep.mp3">
+</audio>
+
+<div class="sidebar" id="menu">
+
+<video class="menuVideo" autoplay muted loop>
+<source src="video4.mp4">
+</video>
+
+<div class="title">MENU</div>
+
+<a class="menuItem" href="page2.html">
+<img src="home.jpg">
+Beranda
+</a>
+
+<a class="menuItem" href="index.html">
+<span class="loginIcon">👤</span>
+Login
+</a>
+
+</div>
+
+<audio id="bgm" loop>
+<source src="song3.mp3">
+</audio>
+
+<audio id="clickSound">
+<source src="click1.mp3">
+</audio>
+
+<div class="banner">
+
+<video autoplay muted loop class="bannerVideo">
+<source src="video2.mp4">
+</video>
+
+<div class="bannerText">
+<h1>MbahDrong</h1>
+<p>Power By All Team</p>
+</div>
+
+<button class="soundBtn" onclick="toggleSound()" id="soundBtn">
+🔊 Suara ON
+</button>
+
+</div>
+
+<div class="quizBox">
+
+<div class="notif" onclick="showInfo()">🔔</div>
+
+<div class="question" id="question"></div>
+
+<div class="score" id="score">
+⭐ Score: 0
+</div>
+
+<div class="timerBar">
+<div class="timerLoad" id="timerLoad"></div>
+</div>
+
+<div id="options"></div>
+
+</div>
+
+<div class="infoPopup" id="infoPopup">
+Score wajib 70 agar bisa buka daget nya
+<br>
+<button onclick="closeInfo()">OK</button>
+</div>
+
+<script>
+
+let questions=[
+{q:"Ibukota Indonesia?",o:["Bandung","Jakarta","Surabaya","Bali"],a:1},
+{q:"2+2=?",o:["3","4","5","6"],a:1},
+{q:"Planet terbesar?",o:["Mars","Bumi","Jupiter","Venus"],a:2},
+{q:"Hewan tercepat?",o:["Cheetah","Singa","Harimau","Kuda"],a:0},
+{q:"Warna bendera Indonesia?",o:["Merah Putih","Merah Biru","Putih Biru","Hijau"],a:0},
+{q:"5+5=?",o:["8","9","10","11"],a:2},
+{q:"Gunung tertinggi?",o:["Everest","Fuji","Kerinci","Rinjani"],a:0},
+{q:"Laut terbesar?",o:["Pasifik","Atlantik","Hindia","Arktik"],a:0},
+{q:"3x3=?",o:["6","7","8","9"],a:3},
+{q:"Ibukota Jepang?",o:["Tokyo","Osaka","Kyoto","Nagoya"],a:0},
+{q:"10-5=?",o:["2","3","5","6"],a:2},
+{q:"Planet merah?",o:["Mars","Venus","Bumi","Saturnus"],a:0},
+{q:"1 jam berapa menit?",o:["30","45","60","90"],a:2},
+{q:"7+3=?",o:["8","9","10","11"],a:2},
+{q:"Benua terbesar?",o:["Afrika","Asia","Eropa","Australia"],a:1},
+{q:"5x2=?",o:["8","9","10","12"],a:2},
+{q:"Ibukota Thailand?",o:["Bangkok","Phuket","Chiang Mai","Pattaya"],a:0},
+{q:"Planet terdekat matahari?",o:["Merkurius","Venus","Bumi","Mars"],a:0},
+{q:"9-4=?",o:["3","4","5","6"],a:2},
+{q:"Air membeku berapa derajat?",o:["0","10","50","100"],a:0}
+]
+
+questions.sort(()=>Math.random()-0.5)
+
+let index=0
+let score=0
+
+const qText=document.getElementById("question")
+const options=document.getElementById("options")
+const scoreText=document.getElementById("score")
+
+function loadQuestion(){
+
+if(index>=20){
+
+startLoading()
+
+return
+}
+
+let q=questions[index]
+
+qText.innerHTML=q.q
+options.innerHTML=""
+
+q.o.forEach((opt,i)=>{
+
+let div=document.createElement("div")
+div.className="option"
+div.innerText=opt
+div.onclick=()=>check(div,i==q.a)
+
+options.appendChild(div)
+
+})
+
+startTimer()
+
+}
+
+function startLoading(){
+
+document.getElementById("loadingScreen").style.display="flex"
+
+let bar=document.getElementById("progressBar")
+let w=0
+
+let load=setInterval(()=>{
+
+w++
+bar.style.width=w+"%"
+
+if(w>=100){
+clearInterval(load)
+
+if(score>=70){
+location.href="score.html"
+}else{
+location.href="score1.html"
+}
+
+}
+
+},40)
+
+}
+
+function check(el,correct){
+
+playClick()
+clearInterval(timer)
+
+document.querySelectorAll(".option").forEach(o=>o.onclick=null)
+
+if(correct){
+el.classList.add("correct")
+score+=5
+}else{
+el.classList.add("wrong")
+score-=3
+}
+
+if(score<0)score=0
+if(score>100)score=100
+
+scoreText.innerHTML="⭐ Score: "+score
+
+setTimeout(()=>{
+index++
+loadQuestion()
+},800)
+
+}
+
+let timer
+let width
+
+function startTimer(){
+
+width=100
+let bar=document.getElementById("timerLoad")
+
+clearInterval(timer)
+
+timer=setInterval(()=>{
+
+width-=1
+bar.style.width=width+"%"
+
+if(width<=0){
+clearInterval(timer)
+score-=3
+if(score<0)score=0
+scoreText.innerHTML="⭐ Score: "+score
+index++
+loadQuestion()
+}
+
+},100)
+
+}
+
+loadQuestion()
+
+let audio=document.getElementById("bgm")
+let click=document.getElementById("clickSound")
+let btn=document.getElementById("soundBtn")
+let soundOn=true
+
+window.onload=function(){
+audio.volume=0.5
+audio.play().catch(()=>{
+document.addEventListener("click",()=>audio.play(),{once:true})
+})
+}
+
+function toggleSound(){
+playClick()
+if(soundOn){
+audio.pause()
+btn.innerHTML="🔇 Suara OFF"
+soundOn=false
+}else{
+audio.play()
+btn.innerHTML="🔊 Suara ON"
+soundOn=true
+}
+}
+
+function playClick(){
+click.currentTime=0
+click.play()
+}
+
+let open=false
+
+function toggleMenu(){
+document.getElementById("sweep").play()
+let menu=document.getElementById("menu")
+let overlay=document.getElementById("overlay")
+
+if(open){
+menu.style.left="-340px"
+overlay.style.display="none"
+}else{
+menu.style.left="0"
+overlay.style.display="block"
+}
+
+open=!open
+}
+
+function showInfo(){
+document.getElementById("infoPopup").style.display="block"
+}
+
+function closeInfo(){
+document.getElementById("infoPopup").style.display="none"
+}
+
+const canvas=document.getElementById("bg")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+let particles=[]
+
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*1,
+vy:(Math.random()-0.5)*1
+})
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ctx.fillStyle="white"
+
+particles.forEach(p=>{
+
+p.x+=p.vx
+p.y+=p.vy
+
+if(p.x<0||p.x>canvas.width)p.vx*=-1
+if(p.y<0||p.y>canvas.height)p.vy*=-1
+
+ctx.beginPath()
+ctx.arc(p.x,p.y,1.5,0,Math.PI*2)
+ctx.fill()
+
+particles.forEach(p2=>{
+
+let dx=p.x-p2.x
+let dy=p.y-p2.y
+let dist=Math.sqrt(dx*dx+dy*dy)
+
+if(dist<120){
+
+ctx.strokeStyle="rgba(255,255,255,0.08)"
+ctx.beginPath()
+ctx.moveTo(p.x,p.y)
+ctx.lineTo(p2.x,p2.y)
+ctx.stroke()
+
+}
+
+})
+
+})
+
+requestAnimationFrame(animate)
+
+}
+
+animate()
+
+</script>
+
+</body>
+</html>
