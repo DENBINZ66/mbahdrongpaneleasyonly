@@ -116,12 +116,30 @@ animation:load 3s linear forwards;
 100%{width:100%}
 }
 
+/* AUDIO BUTTON */
+
+.audioBtn{
+position:fixed;
+top:15px;
+right:15px;
+background:#111;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+border:1px solid rgba(255,255,255,0.2);
+font-size:14px;
+}
+
 </style>
 </head>
 
 <body>
 
 <canvas id="bg"></canvas>
+
+<div class="audioBtn" onclick="toggleAudio()" id="audioBtn">
+🔊 ON
+</div>
 
 <audio id="click">
 <source src="click.mp3">
@@ -172,20 +190,32 @@ Please wait for loading
 
 <script>
 
-/* PLAY SONG SAAT SENTUH LAYAR */
+/* AUDIO CONTROL */
 
 let musicPlayed=false
+let bgm=document.getElementById("bgm")
+let audioBtn=document.getElementById("audioBtn")
 
 document.addEventListener("click",function(){
 
 if(!musicPlayed){
-
-document.getElementById("bgm").play()
+bgm.play()
 musicPlayed=true
-
 }
 
 })
+
+function toggleAudio(){
+
+if(bgm.paused){
+bgm.play()
+audioBtn.innerHTML="🔊 ON"
+}else{
+bgm.pause()
+audioBtn.innerHTML="🔇 OFF"
+}
+
+}
 
 /* BUTTON */
 
