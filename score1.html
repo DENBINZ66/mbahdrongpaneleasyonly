@@ -116,6 +116,20 @@ animation:load 3s linear forwards;
 100%{width:100%}
 }
 
+/* AUDIO BUTTON */
+
+.audioBtn{
+position:fixed;
+top:15px;
+right:15px;
+background:#111;
+padding:8px 14px;
+border-radius:8px;
+font-size:14px;
+cursor:pointer;
+border:1px solid rgba(255,255,255,0.2);
+}
+
 </style>
 </head>
 
@@ -123,11 +137,15 @@ animation:load 3s linear forwards;
 
 <canvas id="bg"></canvas>
 
+<div class="audioBtn" onclick="toggleAudio()" id="audioBtn">
+🔊 ON
+</div>
+
 <audio id="click">
 <source src="click.mp3">
 </audio>
 
-<audio id="bgm" loop>
+<audio id="bgm" loop autoplay>
 <source src="song4.mp3">
 </audio>
 
@@ -170,18 +188,26 @@ Please wait for loading
 
 <script>
 
-let musicPlayed=false
+/* AUDIO CONTROL */
 
-document.addEventListener("click",function(){
+let bgm = document.getElementById("bgm")
+let audioBtn = document.getElementById("audioBtn")
 
-if(!musicPlayed){
+bgm.volume = 1
 
-document.getElementById("bgm").play()
-musicPlayed=true
+function toggleAudio(){
+
+if(bgm.paused){
+bgm.play()
+audioBtn.innerHTML="🔊 ON"
+}else{
+bgm.pause()
+audioBtn.innerHTML="🔇 OFF"
+}
 
 }
 
-})
+/* CLICK BUTTON */
 
 function goLink(type){
 
@@ -202,6 +228,8 @@ location.href="page2.html"
 },3000)
 
 }
+
+/* PARTICLE BACKGROUND */
 
 const canvas=document.getElementById("bg")
 const ctx=canvas.getContext("2d")
