@@ -190,8 +190,8 @@ Please wait for loading
 
 /* AMBIL SCORE DARI URL */
 
-const params = new URLSearchParams(window.location.search)
-let score = parseInt(params.get("score")) || 0
+let score = localStorage.getItem("quizScore") || 0
+score = parseInt(score)
 
 let titleText=document.getElementById("titleText")
 let subText=document.getElementById("subText")
