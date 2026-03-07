@@ -455,11 +455,9 @@ bar.style.width=w+"%"
 if(w>=100){
 clearInterval(load)
 
-if(score>=70){
+localStorage.setItem("quizScore",score)
+
 location.href="score.html"
-}else{
-location.href="score.html"
-}
 
 }
 
@@ -644,4 +642,4 @@ animate()
 </script>
 
 </body>
-</html>
+  </html>
